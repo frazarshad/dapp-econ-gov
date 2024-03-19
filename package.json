@@ -14,7 +14,8 @@
     "format": "prettier --write src",
     "postinstall": "patch-package",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "test:e2e": "EXTENSION=keplr SKIP_EXTENSION_SETUP=true synpress run --configFile=tests/e2e/synpress.config.cjs"
   },
   "dependencies": {
     "@agoric/rpc": "^0.0.2-dev-2c6fbc5.0",
@@ -51,6 +52,7 @@
   },
   "devDependencies": {
     "@agoric/governance": "^0.10.3",
+    "@agoric/synpress": "^3.7.2-beta.12",
     "@keplr-wallet/types": "^0.11.1",
     "@tailwindcss/forms": "^0.5.3",
     "@types/node": "^18.7.13",
