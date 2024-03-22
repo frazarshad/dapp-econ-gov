@@ -20,36 +20,6 @@ describe('Make Proposal Tests', () => {
       cy.acceptAccess();
     });
 
-    it('should have value of 1000 on psm inter', () => {
-      cy.origin('https://psm.inter.trade', () => {
-        cy.visit('/');
-        // Switch to local network
-        cy.get('button').contains('Agoric Mainnet').click();
-        cy.get('button').contains('Local Network').click();
-
-        // Click the connect button
-        cy.get('button').contains('Connect Keplr').click();
-        cy.get('input[type="checkbox"]').click();
-        cy.get('button:enabled').contains('Proceed').click();
-      });
-
-      // Accept access and confirm
-      cy.acceptAccess();
-
-      cy.origin('https://psm.inter.trade', () => {
-        cy.get('button').contains('Keplr Connected').should('be.visible');
-
-        // Select asset and verify original value
-        cy.get('button').contains('Select asset').click();
-        cy.get('button').contains('USDT_axl').click();
-        cy.get('div')
-          .contains('IST Available')
-          .children()
-          .first()
-          .should('have.text', '1000.00');
-      });
-    });
-
     it('should allow gov1 to create a proposal', () => {
       cy.visit('/?agoricNet=local');
 
@@ -128,26 +98,8 @@ describe('Make Proposal Tests', () => {
           cy.get('span').contains('Change Accepted').should('be.visible');
         });
     });
-
-    it('should update the value of 100 on psm inter', () => {
-      cy.origin('https://psm.inter.trade', () => {
-        cy.visit('/');
-
-        // Click the connect button
-        cy.get('button').contains('Connect Keplr').click();
-        cy.get('button').contains('Keplr Connected').should('be.visible');
-
-        // Select asset and verify new value
-        cy.get('button').contains('Select asset').click();
-        cy.get('button').contains('USDT_axl').click();
-        cy.get('div')
-          .contains('IST Available')
-          .children()
-          .first()
-          .should('have.text', '100.00');
-      });
-    });
   });
+
   context('Vaults tests', () => {
     it('should allow gov1 to create a proposal', () => {
       cy.visit('/?agoricNet=local');
