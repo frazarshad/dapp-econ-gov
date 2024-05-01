@@ -78,7 +78,7 @@ jobs:
       - name: Debug Log
         if: always()
         run: |
-          echo "${{ github.event_name}} ${{ IS_EMERYNET_TEST }}"
+          echo "${{ github.event_name}} ${{ env.IS_EMERYNET_TEST }}"
           
       - name: Archive e2e artifacts locally
         uses: actions/upload-artifact@v3
