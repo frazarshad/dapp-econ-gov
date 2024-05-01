@@ -77,7 +77,7 @@ jobs:
 
       - name: Archive e2e artifacts locally
         uses: actions/upload-artifact@v3
-        if: ${{ !cancelled() && !env.IS_EMERYNET_TEST  }}
+        if: ${{ (success() || failure()) && !env.IS_EMERYNET_TEST  }}
         with:
           name: e2e-artifacts
           path: |
@@ -87,7 +87,7 @@ jobs:
 
       - name: Archive e2e artifacts to GCS
         uses: google-github-actions/upload-cloud-storage@v2
-        if: ${{ !cancelled() && env.IS_EMERYNET_TEST }}
+        if: ${{ (success() || failure()) && env.IS_EMERYNET_TEST }}
         with:
           path: 'tests/e2e/docker'
           destination: 'github-artifacts/${{ github.repository }}/${{ github.run_id }}/${{ github.event.repository.updated_at }}'
