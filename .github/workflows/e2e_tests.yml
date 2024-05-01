@@ -79,7 +79,7 @@ jobs:
       - name: Debug Log
         if: always()
         run: |
-          echo "${{ env.IS_EMERYNET_TEST === 'true' }} ${{steps.e2e_test.outcome == 'success' }} ${{ env.IS_EMERYNET_TEST === 'false' }}"
+          echo "${{ env.IS_EMERYNET_TEST == 'true' }} ${{steps.e2e_test.outcome == 'success' }} ${{ env.IS_EMERYNET_TEST == 'false' }}"
           
       - name: Archive e2e artifacts locally
         uses: actions/upload-artifact@v3
