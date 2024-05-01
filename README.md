@@ -6,7 +6,7 @@ UI for Governance of Inter Protocol
 
 # Development
 
-# Test net
+# Test net???
 
 Start HMR server:
 
