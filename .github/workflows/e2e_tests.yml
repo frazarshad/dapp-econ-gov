@@ -22,7 +22,7 @@ jobs:
       id-token: 'write'
 
     env:
-      IS_EMERYNET_TEST: github.event_name == 'schedule'
+      IS_EMERYNET_TEST: ${{ github.event_name == 'schedule' }}
 
     steps:
       - name: Checkout
@@ -78,7 +78,7 @@ jobs:
       - name: Debug Log
         if: always()
         run: |
-          echo "${{ github.event_name}}"
+          echo "${{ github.event_name}} ${{ IS_EMERYNET_TEST }}"
           
       - name: Archive e2e artifacts locally
         uses: actions/upload-artifact@v3
