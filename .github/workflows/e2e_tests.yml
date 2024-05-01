@@ -77,7 +77,7 @@ jobs:
 
       - name: Debug Log
         run: |
-          echo " ${{abc}} ${{def}}"
+          echo " ${{env.abc}} ${{env.def}}"
         env:
           abc: ${{ !cancelled() }}
           def: ${{ env.IS_EMERYNET_TEST }}
