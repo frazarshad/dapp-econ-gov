@@ -76,6 +76,7 @@ jobs:
           COMMIT_INFO_SHA: ${{ github.event.pull_request.head.sha }}
 
       - name: Debug Log
+        if: always()
         run: |
           echo "${{env.def}}"
         env:
