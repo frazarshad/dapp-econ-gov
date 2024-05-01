@@ -77,7 +77,10 @@ jobs:
 
       - name: Debug Log
         run: |
-          echo "${{ !cancelled() }} ${{ env.IS_EMERYNET_TEST }}"
+          echo " ${{abc}} ${{def}}"
+        env:
+          abc: ${{ !cancelled() }}
+          def: ${{ env.IS_EMERYNET_TEST }}
           
       - name: Archive e2e artifacts locally
         uses: actions/upload-artifact@v3
