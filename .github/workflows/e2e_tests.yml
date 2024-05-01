@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '*/5 0 * * *'
 
 concurrency:
   group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label ||
@@ -44,19 +44,18 @@ jobs:
 
       - name: 'GCP auth'
         uses: 'google-github-actions/auth@v2'
-        if: env.IS_EMERYNET_TEST
+        if: ${{ env.IS_EMERYNET_TEST == 'true' }}
         with:
           project_id: 'simulationlab'
           workload_identity_provider: 'projects/60745596728/locations/global/workloadIdentityPools/github/providers/dapp-econ-gov'
 
       - name: Run e2e tests
-        id: e2e_test
         run: |
           docker-compose -f tests/e2e/docker-compose.yml --profile $SYNPRESS_PROFILE up --build --exit-code-from synpress
         env:
           # conditionals based on github event
-          SYNPRESS_PROFILE: ${{ env.IS_EMERYNET_TEST && 'daily-tests' || 'synpress' }}
-          CYPRESS_AGORIC_NET: ${{ env.IS_EMERYNET_TEST && 'emerynet' || 'local' }}
+          SYNPRESS_PROFILE: ${{ env.IS_EMERYNET_TEST == 'true' && 'daily-tests' || 'synpress' }}
+          CYPRESS_AGORIC_NET: ${{ env.IS_EMERYNET_TEST == 'true' && 'emerynet' || 'local' }}
           # for docker-compose.yml
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
@@ -76,14 +75,9 @@ jobs:
           COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
           COMMIT_INFO_SHA: ${{ github.event.pull_request.head.sha }}
 
-      - name: Debug Log
-        if: always()
-        run: |
-          echo "${{ env.IS_EMERYNET_TEST == 'true' }} ${{steps.e2e_test.outcome == 'success' }} ${{ env.IS_EMERYNET_TEST == 'false' }}"
-          
       - name: Archive e2e artifacts locally
         uses: actions/upload-artifact@v3
-        if: ${{ env.IS_EMERYNET_TEST == 'false'  && !cancelled()}}
+        if: ${{ env.IS_EMERYNET_TEST == 'false' && !cancelled()}}
         with:
           name: e2e-artifacts
           path: |
@@ -100,5 +94,5 @@ jobs:
         continue-on-error: true
 
       - name: Log Path to GCS Artifacts
-        if: env.IS_EMERYNET_TEST
+        if: ${{ env.IS_EMERYNET_TEST == 'true' && !cancelled() }}
         run: echo "https://console.cloud.google.com/storage/browser/github-artifacts/${{ github.repository }}/${{ github.run_id }}/${{ github.event.repository.updated_at }}/docker/videos"
