@@ -7,6 +7,16 @@ on:
     branches: [main]
   schedule:
     - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      network:
+        description: 'Network'
+        required: false
+        default: 'local'
+        type: choice
+        options:
+          - local
+          - emerynet
 
 concurrency:
   group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label ||
@@ -22,7 +32,7 @@ jobs:
       id-token: 'write'
 
     env:
-      IS_EMERYNET_TEST: ${{ github.event_name == 'schedule' }}
+      IS_EMERYNET_TEST: ${{ github.event_name == 'schedule' || inputs.network == 'emerynet' }}
 
     steps:
       - name: Checkout
